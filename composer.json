@@ -1,0 +1,32 @@
+{
+	"name": "liquiddesign/messages",
+	"description": "✉ Služba pro generování zpráv pro Nette Mailer ze šablon z databáze",
+	"license": "MIT",
+	"autoload": {
+		"psr-4": {"EmailTemplates\\": "src/"},
+		"classmap": []
+	},
+	"require" :
+	{
+		"php":">=7.4",
+		"nette/mail":"^3.0",
+		"nette/application":"^3.0",
+		"latte/latte":"^2.0",
+		"liquiddesign/storm": "~1.0"
+	},
+	"require-dev": 
+	{
+		"nette/tester":"*",
+		"composer/composer": "*",
+		"liquiddesign/codestyle": "@dev",
+		"liquiddesign/migrator": "@dev",
+		"phpstan/phpstan": "*",
+		"tracy/tracy":"*"
+	},
+	"scripts": {
+		"phpstan": "phpstan analyse --memory-limit 1G -c phpstan.neon",
+		"phpcs": "phpcs --standard=ruleset.xml --ignore=assets src",
+		"phpcsfix": "phpcbf --standard=ruleset.xml --ignore=assets src",
+		"tester": "tester tests/Cases/*.phpt  -c tests/php.ini --setup tests/setup.php"
+	}
+}
