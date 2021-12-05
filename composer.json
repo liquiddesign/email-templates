@@ -1,5 +1,5 @@
 {
-	"name": "liquiddesign/messages",
+	"name": "liquiddesign/email-templates",
 	"description": "✉ Služba pro generování zpráv pro Nette Mailer ze šablon z databáze",
 	"license": "MIT",
 	"autoload": {
