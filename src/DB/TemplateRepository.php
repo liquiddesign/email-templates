@@ -73,7 +73,7 @@ class TemplateRepository extends Repository
 		$message = new Message();
 		
 		if ($template->type === 'outgoing') {
-			$message->setFrom($template->email ?? $this->defaultFrom, $template->alias);
+			$message->setFrom($template->email ?? $this->defaultFrom, $template->alias ?? $this->defaultFromAlias);
 			
 			foreach ($emails as $alias => $email) {
 				$message->addTo($email, \is_string($alias) ? $alias : $email);
