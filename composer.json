@@ -1,6 +1,6 @@
 {
 	"name": "liquiddesign/email-templates",
-	"description": "✉ Služba pro generování zpráv pro Nette Mailer ze šablon z databáze",
+	"description": "＠ Služba pro generování zpráv pro Nette Mailer ze šablon z databáze",
 	"license": "MIT",
 	"autoload": {
 		"psr-4": {"EmailTemplates\\": "src/"},
@@ -18,7 +18,7 @@
 	{
 		"nette/tester":"*",
 		"composer/composer": "*",
-		"liquiddesign/codestyle": "@dev",
+		"liquiddesign/codestyle": "~1.0",
 		"liquiddesign/migrator": "@dev",
 		"phpstan/phpstan": "*",
 		"tracy/tracy":"*"
