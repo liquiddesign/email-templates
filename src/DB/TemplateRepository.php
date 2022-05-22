@@ -130,11 +130,26 @@ class TemplateRepository extends Repository
 		return $this->renderToString($this->wrapLayoutLatte($templateContent, $layoutContent), $vars);
 	}
 	
+	public function getLatteEngine(): Engine
+	{
+		if (isset($this->latte)) {
+			return $this->latte;
+		}
+		
+		$latte = $this->latteFactory->create();
+		UIMacros::install($latte->getCompiler());
+		$latte->setLoader(new StringLoader());
+		$latte->setPolicy($this->getLatteSecurityPolicy());
+		$latte->setSandboxMode();
+		
+		return $this->latte = $latte;
+	}
+	
 	private function getLayoutContent(?string $layout): string
 	{
 		if ($layout) {
 			if (!$this->layoutPath) {
-				throw new \DomainException("Layout path is not defined");
+				throw new \DomainException('Layout path is not defined');
 			}
 			
 			$layoutFilePath = $this->layoutPath . '/' . $layout;
@@ -146,7 +161,7 @@ class TemplateRepository extends Repository
 			$layoutContent = \file_get_contents($layoutFilePath);
 			
 			if ($layoutContent === false) {
-				throw new \DomainException("Layout cannot be loaded");
+				throw new \DomainException('Layout cannot be loaded');
 			}
 			
 			return $layoutContent;
@@ -172,27 +187,12 @@ class TemplateRepository extends Repository
 	private function getLatteSecurityPolicy(): Policy
 	{
 		$policy = SecurityPolicy::createSafePolicy();
-		$policy->allowMacros(['include']);
+		$policy->allowTags(['include']);
 		$policy->allowProperties(\ArrayObject::class, (array)$policy::ALL);
 		$policy->allowProperties(Entity::class, (array)$policy::ALL);
 		$policy->allowMethods(Entity::class, (array)$policy::ALL);
 		$policy->allowFilters(['price', 'date']);
 		
 		return $policy;
-	}
-	
-	private function getLatteEngine(): Engine
-	{
-		if (isset($this->latte)) {
-			return $this->latte;
-		}
-		
-		$latte = $this->latteFactory->create();
-		UIMacros::install($latte->getCompiler());
-		$latte->setLoader(new StringLoader());
-		$latte->setPolicy($this->getLatteSecurityPolicy());
-		$latte->setSandboxMode();
-		
-		return $this->latte = $latte;
 	}
 }
