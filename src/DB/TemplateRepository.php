@@ -130,7 +130,11 @@ class TemplateRepository extends Repository
 		return $this->renderToString($this->wrapLayoutLatte($templateContent, $layoutContent), $vars);
 	}
 	
-	public function getLatteEngine(): Engine
+	/**
+	 * @param array<int, string> $filters
+	 * @param array<int, string> $tags
+	 */
+	public function getLatteEngine(array $filters = [], array $tags = []): Engine
 	{
 		if (isset($this->latte)) {
 			return $this->latte;
@@ -139,7 +143,7 @@ class TemplateRepository extends Repository
 		$latte = $this->latteFactory->create();
 		UIMacros::install($latte->getCompiler());
 		$latte->setLoader(new StringLoader());
-		$latte->setPolicy($this->getLatteSecurityPolicy());
+		$latte->setPolicy($this->getLatteSecurityPolicy($filters, $tags));
 		$latte->setSandboxMode();
 		
 		return $this->latte = $latte;
@@ -166,7 +170,7 @@ class TemplateRepository extends Repository
 			
 			return $layoutContent;
 		}
-
+		
 		return '{include email_co}';
 	}
 	
@@ -184,14 +188,18 @@ class TemplateRepository extends Repository
 		return $this->getLatteEngine()->renderToString($str, $vars);
 	}
 	
-	private function getLatteSecurityPolicy(): Policy
+	/**
+	 * @param array<int, string> $filters
+	 * @param array<int, string> $tags
+	 */
+	private function getLatteSecurityPolicy(array $filters = [], array $tags = []): Policy
 	{
 		$policy = SecurityPolicy::createSafePolicy();
-		$policy->allowTags(['include']);
+		$policy->allowTags(['include'] + $tags);
 		$policy->allowProperties(\ArrayObject::class, (array)$policy::ALL);
 		$policy->allowProperties(Entity::class, (array)$policy::ALL);
 		$policy->allowMethods(Entity::class, (array)$policy::ALL);
-		$policy->allowFilters(['price', 'date']);
+		$policy->allowFilters(['price', 'date'] + $filters);
 		
 		return $policy;
 	}
