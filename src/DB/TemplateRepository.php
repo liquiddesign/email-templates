@@ -9,7 +9,7 @@ use Latte\Loaders\StringLoader;
 use Latte\Policy;
 use Latte\Sandbox\SecurityPolicy;
 use Nette\Bridges\ApplicationLatte\LatteFactory;
-use Nette\Bridges\ApplicationLatte\UIMacros;
+use Nette\Bridges\ApplicationLatte\UIExtension;
 use Nette\Mail\Message;
 use StORM\DIConnection;
 use StORM\Entity;
@@ -141,7 +141,7 @@ class TemplateRepository extends Repository
 		}
 		
 		$latte = $this->latteFactory->create();
-		UIMacros::install($latte->getCompiler());
+		$latte->addExtension(new UIExtension(null));
 		$latte->setLoader(new StringLoader());
 		$latte->setPolicy($this->getLatteSecurityPolicy($filters, $tags));
 		$latte->setSandboxMode();
