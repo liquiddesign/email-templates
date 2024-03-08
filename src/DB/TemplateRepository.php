@@ -196,9 +196,9 @@ class TemplateRepository extends Repository
 	{
 		$policy = SecurityPolicy::createSafePolicy();
 		$policy->allowTags(['include'] + $tags);
-		$policy->allowProperties(\ArrayObject::class, (array)$policy::ALL);
-		$policy->allowProperties(Entity::class, (array)$policy::ALL);
-		$policy->allowMethods(Entity::class, (array)$policy::ALL);
+		$policy->allowProperties(\ArrayObject::class, (array) $policy::ALL);
+		$policy->allowProperties(Entity::class, (array) $policy::ALL);
+		$policy->allowMethods(Entity::class, (array) $policy::ALL);
 		$policy->allowFilters(['price', 'date'] + $filters);
 		
 		return $policy;
